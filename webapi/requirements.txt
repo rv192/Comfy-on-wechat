@@ -1,0 +1,9 @@
+websocket-client
+requests
+pyyaml
+pillow
+fastapi
+uvicorn[standard]
+loguru
+rich
+tqdm

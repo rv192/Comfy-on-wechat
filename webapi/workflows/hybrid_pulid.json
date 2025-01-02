@@ -1,0 +1,286 @@
+{
+  "1": {
+    "inputs": {
+      "clip_l": "A man standing on a busy street holding a white paper with 'AIGC' written on it, in a realistic style. The scene captures the urban atmosphere with a focus on the man's expression and the clarity of the text on the paper. The composition is a medium shot, emphasizing the man and the paper against the backdrop of the bustling street.",
+      "t5xxl": "A man standing on a busy street holding a white paper with 'AIGC' written on it, in a realistic style. The scene captures the urban atmosphere with a focus on the man's expression and the clarity of the text on the paper. The composition is a medium shot, emphasizing the man and the paper against the backdrop of the bustling street.",
+      "guidance": 3.5,
+      "clip": [
+        "114",
+        1
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "☁️BizyAir CLIPTextEncodeFlux"
+    }
+  },
+  "2": {
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "空潜空间图像"
+    }
+  },
+  "3": {
+    "inputs": {
+      "noise_seed": 12331174019111
+    },
+    "class_type": "BizyAir_RandomNoise",
+    "_meta": {
+      "title": "☁️BizyAir RandomNoise"
+    }
+  },
+  "78": {
+    "inputs": {
+      "pulid_file": "pulid_flux.safetensors"
+    },
+    "class_type": "BizyAir_PulidFluxModelLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load PuLID Flux Model"
+    }
+  },
+  "79": {
+    "inputs": {},
+    "class_type": "BizyAir_PulidFluxEvaClipLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load Eva Clip (PuLID Flux)"
+    }
+  },
+  "81": {
+    "inputs": {
+      "provider": "CUDA"
+    },
+    "class_type": "BizyAir_PulidFluxInsightFaceLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load InsightFace (PuLID Flux)"
+    }
+  },
+  "83": {
+    "inputs": {
+      "unet_name": "flux/flux1-dev.sft",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "BizyAir_UNETLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load Diffusion Model"
+    }
+  },
+  "84": {
+    "inputs": {
+      "clip_name1": "t5xxl_fp8_e4m3fn.safetensors",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "BizyAir_DualCLIPLoader",
+    "_meta": {
+      "title": "☁️BizyAir DualCLIPLoader"
+    }
+  },
+  "86": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": 28,
+      "denoise": 0.99,
+      "model": [
+        "97",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicScheduler",
+    "_meta": {
+      "title": "☁️BizyAir BasicScheduler"
+    }
+  },
+  "87": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "BizyAir_KSamplerSelect",
+    "_meta": {
+      "title": "☁️BizyAir KSamplerSelect"
+    }
+  },
+  "89": {
+    "inputs": {
+      "noise": [
+        "3",
+        0
+      ],
+      "guider": [
+        "95",
+        0
+      ],
+      "sampler": [
+        "87",
+        0
+      ],
+      "sigmas": [
+        "86",
+        0
+      ],
+      "latent_image": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "BizyAir_SamplerCustomAdvanced",
+    "_meta": {
+      "title": "☁️BizyAir SamplerCustomAdvanced"
+    }
+  },
+  "90": {
+    "inputs": {
+      "samples": [
+        "89",
+        0
+      ],
+      "vae": [
+        "91",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Decode"
+    }
+  },
+  "91": {
+    "inputs": {
+      "vae_name": "flux/ae.sft"
+    },
+    "class_type": "BizyAir_VAELoader",
+    "_meta": {
+      "title": "☁️BizyAir Load VAE"
+    }
+  },
+  "95": {
+    "inputs": {
+      "model": [
+        "97",
+        0
+      ],
+      "conditioning": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicGuider",
+    "_meta": {
+      "title": "☁️BizyAir BasicGuider"
+    }
+  },
+  "97": {
+    "inputs": {
+      "weight": 0.8,
+      "start_at": 0,
+      "end_at": 1,
+      "model": [
+        "114",
+        0
+      ],
+      "pulid_flux": [
+        "78",
+        0
+      ],
+      "eva_clip": [
+        "79",
+        0
+      ],
+      "face_analysis": [
+        "81",
+        0
+      ],
+      "image": [
+        "112",
+        0
+      ]
+    },
+    "class_type": "BizyAir_ApplyPulidFlux",
+    "_meta": {
+      "title": "☁️BizyAir Apply PuLID Flux"
+    }
+  },
+  "99": {
+    "inputs": {
+      "images": [
+        "90",
+        0
+      ]
+    },
+    "class_type": "SaveImageWebsocket",
+    "_meta": {
+      "title": "保存图像Websocket"
+    }
+  },
+  "111": {
+    "inputs": {
+      "images": ""
+    },
+    "class_type": "NTL_LoadImagesBase64",
+    "_meta": {
+      "title": "ntl Load Images (Base64)"
+    }
+  },
+  "112": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "downscale if bigger",
+      "multiple_of": 0,
+      "image": [
+        "111",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  },
+  "114": {
+    "inputs": {
+      "lora_name": "boreal-V2.Lora",
+      "strength_model": 0.8,
+      "strength_clip": 1,
+      "model_version_id": 4881,
+      "model": [
+        "115",
+        0
+      ],
+      "clip": [
+        "115",
+        1
+      ]
+    },
+    "class_type": "BizyAir_LoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load LoRA"
+    }
+  },
+  "115": {
+    "inputs": {
+      "lora_name": "墨幽-F.1-网图_V1.Lora",
+      "strength_model": 0.6,
+      "strength_clip": 1,
+      "model_version_id": 4887,
+      "model": [
+        "83",
+        0
+      ],
+      "clip": [
+        "84",
+        0
+      ]
+    },
+    "class_type": "BizyAir_LoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load LoRA"
+    }
+  }
+}
