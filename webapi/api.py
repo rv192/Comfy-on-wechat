@@ -92,7 +92,7 @@ def save_image_and_get_url(image_bytes: bytes) -> str:
     """保存图片到服务器，并返回可访问的URL"""
     try:
         # 添加图片大小限制
-        if len(image_bytes) > 50 * 1024 * 1024:  # 50MB
+        if len(image_bytes) > 10 * 1024 * 1024:  # 10MB
             raise HTTPException(status_code=413, detail="图片太大")
             
         image = Image.open(BytesIO(image_bytes))

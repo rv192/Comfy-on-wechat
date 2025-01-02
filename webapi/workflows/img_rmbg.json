@@ -1,20 +1,8 @@
 {
-  "36": {
-    "inputs": {
-      "image": [
-        "103",
-        0
-      ]
-    },
-    "class_type": "BizyAirRemoveBackground",
-    "_meta": {
-      "title": "☁️BizyAir Remove Image Background"
-    }
-  },
   "99": {
     "inputs": {
       "images": [
-        "36",
+        "105",
         0
       ]
     },
@@ -48,6 +36,18 @@
     "class_type": "ImageResize+",
     "_meta": {
       "title": "🔧 Image Resize"
+    }
+  },
+  "105": {
+    "inputs": {
+      "image": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "BizyAirRemoveBackground",
+    "_meta": {
+      "title": "☁️BizyAir Remove Image Background"
     }
   }
 }

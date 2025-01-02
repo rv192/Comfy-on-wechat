@@ -15,15 +15,18 @@ def get_seed() -> int:
 
 def get_safe_seed() -> int:
     return random.randint(MIN_SEED_VALUE, SAFE_MAX_SEED_VALUE)
-
-
+    
 def receiving_image(images_dict: dict):
     imgs = []
     for node_id in images_dict:
         for inx, image_data in enumerate(images_dict[node_id]):
-            image = Image.open(io.BytesIO(image_data)).convert('RGB')
-            # 将图片转换为jpg格式
+            image = Image.open(io.BytesIO(image_data))
             buffer = io.BytesIO()
-            image.save(buffer, format='JPEG')
+            if image.mode == "RGBA":
+                white_image  = Image.new('RGB', image.size, (255, 255, 255))
+                white_image.paste(image, mask=image.split()[3])
+                white_image.save(buffer, format="JPEG")
+            else:
+                image.save(buffer, format="JPEG")
             imgs.append(buffer.getvalue())
     return imgs
