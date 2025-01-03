@@ -24,6 +24,8 @@ def comfyGen(workflow_name: str, prompt: str = None, img_content: str = None):
                 payload[prompt_node]["inputs"]["t5xxl"] = f"1girl, {prompt}"
             if "clip_l" in payload[prompt_node]["inputs"]:
                 payload[prompt_node]["inputs"]["clip_l"] = f"1girl, {prompt}"
+            if "text" in payload[prompt_node]["inputs"]:
+                payload[prompt_node]["inputs"]["text"] = prompt
 
     if img_content:
         # 查找并处理所有图片输入节点

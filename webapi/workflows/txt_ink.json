@@ -1,8 +1,8 @@
 {
   "1": {
     "inputs": {
-      "clip_l": "SY ink, ink, the image is a monochromatic artwork that captures a serene and mystical landscape. dominating the scene is a large, luminous moon or sun, which casts a soft glow over the entire scene. below the celestial body, there are towering rock formations, some of which have trees growing atop them. a traditional pagoda-style structure is perched atop one of the rocks, surrounded by mist. a waterfall cascades down from one of the cliffs, and a calm body of water reflects the entire scene below. birds can be seen flying in the distance, and there's a red seal or stamp in the bottom right corner, which might be the artist's signature or mark.",
-      "t5xxl": "SY ink, ink, the image is a monochromatic artwork that captures a serene and mystical landscape. dominating the scene is a large, luminous moon or sun, which casts a soft glow over the entire scene. below the celestial body, there are towering rock formations, some of which have trees growing atop them. a traditional pagoda-style structure is perched atop one of the rocks, surrounded by mist. a waterfall cascades down from one of the cliffs, and a calm body of water reflects the entire scene below. birds can be seen flying in the distance, and there's a red seal or stamp in the bottom right corner, which might be the artist's signature or mark.",
+      "clip_l": "",
+      "t5xxl": "",
       "guidance": 3.5,
       "clip": [
         "36",

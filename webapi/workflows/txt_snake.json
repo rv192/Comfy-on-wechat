@@ -1,0 +1,297 @@
+{
+  "61": {
+    "inputs": {
+      "ckpt_name": "sdxl/Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors"
+    },
+    "class_type": "BizyAir_CheckpointLoaderSimple",
+    "_meta": {
+      "title": "☁️BizyAir Load Checkpoint"
+    }
+  },
+  "63": {
+    "inputs": {
+      "text": [
+        "227",
+        0
+      ],
+      "clip": [
+        "136",
+        1
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncode",
+    "_meta": {
+      "title": "☁️BizyAir CLIP Text Encode (Prompt)"
+    }
+  },
+  "64": {
+    "inputs": {
+      "text": "ng_deepnegative_v1_75t,(badhandv4:1.2),EasyNegative,(worst quality:2),",
+      "clip": [
+        "136",
+        1
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncode",
+    "_meta": {
+      "title": "☁️BizyAir CLIP Text Encode (Prompt)"
+    }
+  },
+  "65": {
+    "inputs": {
+      "vae_name": "sdxl/sdxl_vae.safetensors"
+    },
+    "class_type": "BizyAir_VAELoader",
+    "_meta": {
+      "title": "☁️BizyAir Load VAE"
+    }
+  },
+  "73": {
+    "inputs": {
+      "image": [
+        "197",
+        0
+      ]
+    },
+    "class_type": "Get resolution [Crystools]",
+    "_meta": {
+      "title": "🪛 Get resolution"
+    }
+  },
+  "92": {
+    "inputs": {
+      "control_net_name": "xinsir-controlnet-depth-sdxl-1.0",
+      "model_version_id": 7967
+    },
+    "class_type": "BizyAir_ControlNetLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load ControlNet Model"
+    }
+  },
+  "93": {
+    "inputs": {
+      "strength": 0.75,
+      "start_percent": 0,
+      "end_percent": 0.9500000000000001,
+      "positive": [
+        "63",
+        0
+      ],
+      "negative": [
+        "64",
+        0
+      ],
+      "control_net": [
+        "92",
+        0
+      ],
+      "image": [
+        "202",
+        0
+      ]
+    },
+    "class_type": "BizyAir_ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "☁️BizyAir Apply ControlNet"
+    }
+  },
+  "95": {
+    "inputs": {
+      "images": [
+        "202",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "预览图像"
+    }
+  },
+  "111": {
+    "inputs": {
+      "seed": 528613494603273,
+      "steps": 25,
+      "cfg": 7,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1,
+      "model": [
+        "136",
+        0
+      ],
+      "positive": [
+        "93",
+        0
+      ],
+      "negative": [
+        "93",
+        1
+      ],
+      "latent_image": [
+        "223",
+        0
+      ]
+    },
+    "class_type": "BizyAir_KSampler",
+    "_meta": {
+      "title": "☁️BizyAir KSampler"
+    }
+  },
+  "113": {
+    "inputs": {
+      "samples": [
+        "111",
+        0
+      ],
+      "vae": [
+        "65",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Decode"
+    }
+  },
+  "136": {
+    "inputs": {
+      "lora_name": "SDXL_蛇年主题_中国结_珠宝",
+      "strength_model": 0.8,
+      "strength_clip": 0.8,
+      "model_version_id": 13060,
+      "model": [
+        "61",
+        0
+      ],
+      "clip": [
+        "61",
+        1
+      ]
+    },
+    "class_type": "BizyAir_LoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load LoRA"
+    }
+  },
+  "197": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "megapixels": 1,
+      "image": [
+        "206",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "将图像缩放到总像素"
+    }
+  },
+  "202": {
+    "inputs": {
+      "ckpt_name": "depth_anything_v2_vitl.pth",
+      "resolution": 1024,
+      "image": [
+        "197",
+        0
+      ]
+    },
+    "class_type": "BizyAirDepthAnythingV2Preprocessor",
+    "_meta": {
+      "title": "☁️BizyAir Depth Anything V2 - Relative"
+    }
+  },
+  "206": {
+    "inputs": {
+      "image_width": [
+        "226",
+        0
+      ],
+      "image_height": [
+        "224",
+        0
+      ],
+      "text": [
+        "1",
+        0
+      ],
+      "font_name": "impact.ttf",
+      "font_size": 250,
+      "font_color": "white",
+      "background_color": "black",
+      "align": "top",
+      "justify": "center",
+      "margins": 0,
+      "line_spacing": 0,
+      "position_x": 0,
+      "position_y": 100,
+      "rotation_angle": 0,
+      "rotation_options": "text center",
+      "font_color_hex": "#000000",
+      "bg_color_hex": "#000000"
+    },
+    "class_type": "CR Draw Text",
+    "_meta": {
+      "title": "🔤️ CR Draw Text"
+    }
+  },
+  "223": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptySD3LatentImage",
+    "_meta": {
+      "title": "空SD3潜空间图像"
+    }
+  },
+  "224": {
+    "inputs": {
+      "value": 1024
+    },
+    "class_type": "SimpleMathInt+",
+    "_meta": {
+      "title": "🔧 Simple Math Int"
+    }
+  },
+  "226": {
+    "inputs": {
+      "value": 1024
+    },
+    "class_type": "SimpleMathInt+",
+    "_meta": {
+      "title": "🔧 Simple Math Int"
+    }
+  },
+  "227": {
+    "inputs": {
+      "prompt": "snknot,snknot,a digital illustration of a red,coiled serpent with intricate,metallic armor-like patterns and a central knot,set against a black background. the snake's scales glisten,reflecting light,adding depth and realism.,TheKnot,"
+    },
+    "class_type": "CR Prompt Text",
+    "_meta": {
+      "title": "⚙️ CR Prompt Text"
+    }
+  },
+  "99": {
+    "inputs": {
+      "images": [
+        "113",
+        0
+      ]
+    },
+    "class_type": "SaveImageWebsocket",
+    "_meta": {
+      "title": "保存图像Websocket"
+    }
+  },
+  "1": {
+    "inputs": {
+      "text": "2025\nAIGC"
+    },
+    "class_type": "CR Text",
+    "_meta": {
+      "title": "🔤 CR Text"
+    }
+  }
+}
