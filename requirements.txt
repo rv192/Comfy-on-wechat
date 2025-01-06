@@ -1,0 +1,9 @@
+websocket-client
+requests>=2.31.0
+pyyaml
+pillow
+fastapi
+uvicorn[standard]
+loguru
+rich
+tqdm
