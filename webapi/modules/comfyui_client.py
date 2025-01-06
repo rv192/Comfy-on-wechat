@@ -6,12 +6,13 @@ import json
 import urllib.request
 import urllib.parse
 from rich.console import Console
+from modules.config import config
 
 console = Console()
 
 class ComfyuiClient(object):
-    def __init__(self, server: str = "127.0.0.1:8188"):
-        self.server_address = server
+    def __init__(self, server: str = None):
+        self.server_address = server or config.comfyui_server
         self.client_id = str(uuid.uuid4())
         self.ws = websocket.WebSocket()
         self.ws.connect("ws://{}/ws?clientId={}".format(self.server_address, self.client_id))

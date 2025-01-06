@@ -1,32 +1,22 @@
-import base64
-import io
 import random
-from PIL import Image
+import base64
+from modules.config import config
 
+def get_seed():
+    return random.randint(1, 1125899906842624)
 
-MAX_SEED_VALUE = 4294967295
-SAFE_MAX_SEED_VALUE = 2147483647
-MIN_SEED_VALUE = 0
-
-
-def get_seed() -> int:
-    return random.randint(MIN_SEED_VALUE, MAX_SEED_VALUE)
-
-
-def get_safe_seed() -> int:
-    return random.randint(MIN_SEED_VALUE, SAFE_MAX_SEED_VALUE)
+def receiving_image(images_dict):
+    """处理接收到的图片"""
+    if not images_dict:
+        return []
     
-def receiving_image(images_dict: dict):
-    imgs = []
-    for node_id in images_dict:
-        for inx, image_data in enumerate(images_dict[node_id]):
-            image = Image.open(io.BytesIO(image_data))
-            buffer = io.BytesIO()
-            if image.mode == "RGBA":
-                white_image  = Image.new('RGB', image.size, (255, 255, 255))
-                white_image.paste(image, mask=image.split()[3])
-                white_image.save(buffer, format="JPEG")
-            else:
-                image.save(buffer, format="JPEG")
-            imgs.append(buffer.getvalue())
-    return imgs
+    image_urls = []
+    for node_id, images in images_dict.items():
+        for image_data in images:
+            # 将 base64 图片数据转换为文件名
+            image_name = base64.b64encode(image_data[:32]).decode('utf-8')[:32]
+            image_name = image_name.replace('/', '_').replace('+', '-')
+            image_url = f"{config.image_url_base}/view?filename={image_name}.png"
+            image_urls.append(image_url)
+    
+    return image_urls
