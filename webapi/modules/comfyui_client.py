@@ -10,8 +10,7 @@ from rich.console import Console
 console = Console()
 
 class ComfyuiClient(object):
-    def __init__(self, server: str = "8.155.23.126:8188"):
-        # 8.155.23.126:8188
+    def __init__(self, server: str = "127.0.0.1:8188"):
         self.server_address = server
         self.client_id = str(uuid.uuid4())
         self.ws = websocket.WebSocket()
