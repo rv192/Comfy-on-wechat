@@ -1,0 +1,193 @@
+{
+  "25": {
+    "inputs": {
+      "unet_name": "kolors/Kolors-Inpainting.safetensors"
+    },
+    "class_type": "BizyAir_MZ_KolorsUNETLoaderV2",
+    "_meta": {
+      "title": "☁️BizyAir MinusZone - KolorsUNETLoaderV2"
+    }
+  },
+  "26": {
+    "inputs": {
+      "grow_mask_by": 0,
+      "pixels": [
+        "50",
+        0
+      ],
+      "vae": [
+        "27",
+        0
+      ],
+      "mask": [
+        "43",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEEncodeForInpaint",
+    "_meta": {
+      "title": "☁️BizyAir VAE Encode (for Inpainting)"
+    }
+  },
+  "27": {
+    "inputs": {
+      "vae_name": "sdxl/sdxl_vae.safetensors"
+    },
+    "class_type": "BizyAir_VAELoader",
+    "_meta": {
+      "title": "☁️BizyAir Load VAE"
+    }
+  },
+  "28": {
+    "inputs": {
+      "seed": [
+        "46",
+        0
+      ],
+      "steps": 20,
+      "cfg": 5,
+      "sampler_name": "euler",
+      "scheduler": "ddim_uniform",
+      "denoise": 1,
+      "model": [
+        "25",
+        0
+      ],
+      "positive": [
+        "53",
+        0
+      ],
+      "negative": [
+        "30",
+        0
+      ],
+      "latent_image": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "BizyAir_KSampler",
+    "_meta": {
+      "title": "☁️BizyAir KSampler"
+    }
+  },
+  "30": {
+    "inputs": {
+      "text": "nsfw，脸部阴影，低分辨率，jpeg伪影、模糊、糟糕，黑脸，霓虹灯"
+    },
+    "class_type": "BizyAir_MinusZoneChatGLM3TextEncode",
+    "_meta": {
+      "title": "☁️BizyAir MinusZone ChatGLM3 Text Encode"
+    }
+  },
+  "32": {
+    "inputs": {
+      "samples": [
+        "28",
+        0
+      ],
+      "vae": [
+        "27",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Decode"
+    }
+  },
+  "36": {
+    "inputs": {
+      "image": [
+        "50",
+        0
+      ]
+    },
+    "class_type": "BizyAirRemoveBackground",
+    "_meta": {
+      "title": "☁️BizyAir Remove Image Background"
+    }
+  },
+  "43": {
+    "inputs": {
+      "mask": [
+        "36",
+        1
+      ]
+    },
+    "class_type": "InvertMask",
+    "_meta": {
+      "title": "反转遮罩"
+    }
+  },
+  "46": {
+    "inputs": {
+      "integer": 0,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
+    }
+  },
+  "47": {
+    "inputs": {
+      "url": "https://bizy-air.oss-cn-beijing.aliyuncs.com/examples_asset/girlwithdog.png"
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No1"
+    }
+  },
+  "48": {
+    "inputs": {
+      "text": "A woman standing in front of the Eiffel Tower in Paris, with a clear blue sky in the background. The scene is vibrant and lively, capturing the essence of Parisian charm. The woman is dressed in a stylish outfit, blending seamlessly with the iconic landmark. The image should have a realistic style, with detailed textures and natural lighting to enhance the beauty of the scene"
+    },
+    "class_type": "CR Text",
+    "_meta": {
+      "title": "🐉Prompt"
+    }
+  },
+  "49": {
+    "inputs": {
+      "images": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "SaveImageWebsocket",
+    "_meta": {
+      "title": "保存图像（网络接口）"
+    }
+  },
+  "50": {
+    "inputs": {
+      "width": 1536,
+      "height": 1536,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "downscale if bigger",
+      "multiple_of": 0,
+      "image": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  },
+  "53": {
+    "inputs": {
+      "text": [
+        "48",
+        0
+      ]
+    },
+    "class_type": "BizyAir_MinusZoneChatGLM3TextEncode",
+    "_meta": {
+      "title": "☁️BizyAir MinusZone ChatGLM3 Text Encode"
+    }
+  }
+}

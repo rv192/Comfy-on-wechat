@@ -1,0 +1,239 @@
+{
+  "3": {
+    "inputs": {
+      "seed": [
+        "75",
+        0
+      ],
+      "steps": 25,
+      "cfg": 3,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "39",
+        0
+      ],
+      "positive": [
+        "55",
+        0
+      ],
+      "negative": [
+        "55",
+        1
+      ],
+      "latent_image": [
+        "55",
+        2
+      ]
+    },
+    "class_type": "BizyAir_KSampler",
+    "_meta": {
+      "title": "☁️BizyAir KSampler"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "34",
+        0
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncode",
+    "_meta": {
+      "title": "☁️BizyAir CLIPTextEncode"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAEDecode"
+    }
+  },
+  "23": {
+    "inputs": {
+      "text": [
+        "79",
+        0
+      ],
+      "clip": [
+        "34",
+        0
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncode",
+    "_meta": {
+      "title": "☁️BizyAir CLIPTextEncode"
+    }
+  },
+  "26": {
+    "inputs": {
+      "guidance": 3.5,
+      "conditioning": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "BizyAir_FluxGuidance",
+    "_meta": {
+      "title": "☁️BizyAir FluxGuidance"
+    }
+  },
+  "32": {
+    "inputs": {
+      "vae_name": "flux.1-fill-vae.safetensors"
+    },
+    "class_type": "BizyAir_VAELoader",
+    "_meta": {
+      "title": "☁️BizyAir VAELoader"
+    }
+  },
+  "34": {
+    "inputs": {
+      "clip_name1": "clip_l.safetensors",
+      "clip_name2": "t5xxl_fp16.safetensors",
+      "type": "flux"
+    },
+    "class_type": "BizyAir_DualCLIPLoader",
+    "_meta": {
+      "title": "☁️BizyAir DualCLIPLoader"
+    }
+  },
+  "39": {
+    "inputs": {
+      "model": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "BizyAir_DifferentialDiffusion",
+    "_meta": {
+      "title": "☁️BizyAir DifferentialDiffusion"
+    }
+  },
+  "54": {
+    "inputs": {
+      "unet_name": "flux/flux1-fill-dev.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "BizyAir_UNETLoader",
+    "_meta": {
+      "title": "☁️BizyAir UNETLoader"
+    }
+  },
+  "55": {
+    "inputs": {
+      "noise_mask": false,
+      "positive": [
+        "26",
+        0
+      ],
+      "negative": [
+        "7",
+        0
+      ],
+      "vae": [
+        "32",
+        0
+      ],
+      "pixels": [
+        "60",
+        0
+      ],
+      "mask": [
+        "60",
+        1
+      ]
+    },
+    "class_type": "BizyAir_InpaintModelConditioning_v2",
+    "_meta": {
+      "title": "☁️BizyAir InpaintModelConditioning_v2"
+    }
+  },
+  "60": {
+    "inputs": {
+      "left": 200,
+      "top": 200,
+      "right": 200,
+      "bottom": 200,
+      "feathering": 40,
+      "image": [
+        "78",
+        0
+      ]
+    },
+    "class_type": "ImagePadForOutpaint",
+    "_meta": {
+      "title": "外补画板"
+    }
+  },
+  "75": {
+    "inputs": {
+      "integer": 0,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
+    }
+  },
+  "76": {
+    "inputs": {
+      "url": "https://c-ssl.dtstatic.com/uploads/blog/202008/18/20200818114600_rvxej.thumb.1000_0.jpg"
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No1"
+    }
+  },
+  "78": {
+    "inputs": {
+      "width": 1280,
+      "height": 1280,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "downscale if bigger",
+      "multiple_of": 0,
+      "image": [
+        "76",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  },
+  "79": {
+    "inputs": {
+      "text": "A woman"
+    },
+    "class_type": "CR Text",
+    "_meta": {
+      "title": "🐉Prompt"
+    }
+  },
+  "80": {
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "SaveImageWebsocket",
+    "_meta": {
+      "title": "保存图像（网络接口）"
+    }
+  }
+}

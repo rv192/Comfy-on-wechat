@@ -1,23 +1,14 @@
 {
-  "1": {
-    "inputs": {
-      "clip_l": "",
-      "t5xxl": "",
-      "guidance": 3.5,
-      "clip": [
-        "36",
-        0
-      ]
-    },
-    "class_type": "BizyAir_CLIPTextEncodeFlux",
-    "_meta": {
-      "title": "☁️BizyAir CLIPTextEncodeFlux"
-    }
-  },
   "2": {
     "inputs": {
-      "width": 1024,
-      "height": 1024,
+      "width": [
+        "125",
+        0
+      ],
+      "height": [
+        "126",
+        0
+      ],
       "batch_size": 1
     },
     "class_type": "EmptyLatentImage",
@@ -27,7 +18,10 @@
   },
   "3": {
     "inputs": {
-      "noise_seed": 614429561750331
+      "noise_seed": [
+        "127",
+        0
+      ]
     },
     "class_type": "BizyAir_RandomNoise",
     "_meta": {
@@ -45,6 +39,27 @@
       "title": "☁️BizyAir DualCLIPLoader"
     }
   },
+  "37": {
+    "inputs": {
+      "clip_l": [
+        "101",
+        0
+      ],
+      "t5xxl": [
+        "101",
+        0
+      ],
+      "guidance": 3.5,
+      "clip": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "☁️BizyAir CLIPTextEncodeFlux"
+    }
+  },
   "47": {
     "inputs": {
       "model": [
@@ -52,7 +67,7 @@
         0
       ],
       "conditioning": [
-        "1",
+        "37",
         0
       ]
     },
@@ -168,6 +183,26 @@
       "title": "☁️BizyAir Load LoRA"
     }
   },
+  "63": {
+    "inputs": {
+      "do_sample": true,
+      "temperature": 0.5,
+      "max_tokens": 256,
+      "caption_type": "Descriptive",
+      "caption_length": "any",
+      "extra_options": "If there is a person/character in the image you must refer to them as {name}.",
+      "name_input": "Jack",
+      "custom_prompt": "",
+      "image": [
+        "100",
+        0
+      ]
+    },
+    "class_type": "BizyAirJoyCaption2",
+    "_meta": {
+      "title": "☁️BizyAir Joy Caption2"
+    }
+  },
   "99": {
     "inputs": {
       "images": [
@@ -178,6 +213,89 @@
     "class_type": "SaveImageWebsocket",
     "_meta": {
       "title": "保存图像到网络接口"
+    }
+  },
+  "100": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "downscale if bigger",
+      "multiple_of": 0,
+      "image": [
+        "104",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  },
+  "101": {
+    "inputs": {
+      "text1": [
+        "102",
+        0
+      ],
+      "text2": [
+        "63",
+        0
+      ],
+      "separator": ","
+    },
+    "class_type": "CR Text Concatenate",
+    "_meta": {
+      "title": "🔤 CR Text Concatenate"
+    }
+  },
+  "102": {
+    "inputs": {
+      "prompt": "smoke style, ink art, Chinese ink wash, black and white"
+    },
+    "class_type": "CR Prompt Text",
+    "_meta": {
+      "title": "Lora激活词"
+    }
+  },
+  "104": {
+    "inputs": {
+      "url": ""
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No1"
+    }
+  },
+  "125": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Width"
+    }
+  },
+  "126": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Height"
+    }
+  },
+  "127": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
     }
   }
 }

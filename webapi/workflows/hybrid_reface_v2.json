@@ -1,0 +1,678 @@
+{
+  "83": {
+    "inputs": {
+      "instantid_file": "ip-adapter.bin"
+    },
+    "class_type": "BizyAir_InstantIDModelLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load InstantID Model"
+    }
+  },
+  "85": {
+    "inputs": {
+      "provider": "CUDA"
+    },
+    "class_type": "BizyAir_InstantIDFaceAnalysis",
+    "_meta": {
+      "title": "☁️BizyAir InstantID Face Analysis"
+    }
+  },
+  "90": {
+    "inputs": {
+      "ckpt_name": "sdxl/Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors"
+    },
+    "class_type": "BizyAir_CheckpointLoaderSimple",
+    "_meta": {
+      "title": "☁️BizyAir Load Checkpoint"
+    }
+  },
+  "91": {
+    "inputs": {
+      "weight": 0.85,
+      "start_at": 0,
+      "end_at": 1,
+      "instantid": [
+        "83",
+        0
+      ],
+      "insightface": [
+        "85",
+        0
+      ],
+      "control_net": [
+        "92",
+        0
+      ],
+      "image": [
+        "165",
+        0
+      ],
+      "model": [
+        "90",
+        0
+      ],
+      "positive": [
+        "93",
+        0
+      ],
+      "negative": [
+        "94",
+        0
+      ],
+      "image_kps": [
+        "141",
+        0
+      ]
+    },
+    "class_type": "BizyAir_ApplyInstantID",
+    "_meta": {
+      "title": "☁️BizyAir Apply InstantID"
+    }
+  },
+  "92": {
+    "inputs": {
+      "control_net_name": "instantid/diffusion_pytorch_model.safetensors",
+      "model_version_id": ""
+    },
+    "class_type": "BizyAir_ControlNetLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load ControlNet Model"
+    }
+  },
+  "93": {
+    "inputs": {
+      "text": "highres, high quality, 1girl,Photography ",
+      "clip": [
+        "90",
+        1
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncode",
+    "_meta": {
+      "title": "☁️BizyAir CLIP Text Encode (Prompt)"
+    }
+  },
+  "94": {
+    "inputs": {
+      "text": "lowres,low quality,",
+      "clip": [
+        "90",
+        1
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncode",
+    "_meta": {
+      "title": "☁️BizyAir CLIP Text Encode (Prompt)"
+    }
+  },
+  "95": {
+    "inputs": {
+      "seed": 798876065161012,
+      "steps": 30,
+      "cfg": 1.2,
+      "sampler_name": "euler",
+      "scheduler": "sgm_uniform",
+      "denoise": 0.65,
+      "model": [
+        "91",
+        0
+      ],
+      "positive": [
+        "91",
+        1
+      ],
+      "negative": [
+        "91",
+        2
+      ],
+      "latent_image": [
+        "128",
+        0
+      ]
+    },
+    "class_type": "BizyAir_KSampler",
+    "_meta": {
+      "title": "☁️BizyAir KSampler"
+    }
+  },
+  "96": {
+    "inputs": {
+      "samples": [
+        "95",
+        0
+      ],
+      "vae": [
+        "90",
+        2
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Decode"
+    }
+  },
+  "128": {
+    "inputs": {
+      "samples": [
+        "130",
+        0
+      ],
+      "mask": [
+        "131",
+        0
+      ]
+    },
+    "class_type": "SetLatentNoiseMask",
+    "_meta": {
+      "title": "设置Latent噪波遮罩"
+    }
+  },
+  "130": {
+    "inputs": {
+      "pixels": [
+        "141",
+        0
+      ],
+      "vae": [
+        "90",
+        2
+      ]
+    },
+    "class_type": "BizyAir_VAEEncode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Encode"
+    }
+  },
+  "131": {
+    "inputs": {
+      "left": 10,
+      "top": 10,
+      "right": 10,
+      "bottom": 10,
+      "mask": [
+        "132",
+        1
+      ]
+    },
+    "class_type": "FeatherMask",
+    "_meta": {
+      "title": "遮罩羽化"
+    }
+  },
+  "132": {
+    "inputs": {
+      "prompt": "face",
+      "box_threshold": 0.3,
+      "text_threshold": 0.3,
+      "image": [
+        "141",
+        0
+      ]
+    },
+    "class_type": "BizyAirSegmentAnythingText",
+    "_meta": {
+      "title": "☁️BizyAir Text Guided SAM"
+    }
+  },
+  "135": {
+    "inputs": {
+      "clip_name1": "t5xxl_fp8_e4m3fn.safetensors",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "BizyAir_DualCLIPLoader",
+    "_meta": {
+      "title": "☁️BizyAir DualCLIPLoader"
+    }
+  },
+  "136": {
+    "inputs": {
+      "text": [
+        "204",
+        0
+      ],
+      "clip": [
+        "196",
+        1
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncode",
+    "_meta": {
+      "title": "☁️BizyAir CLIP Text Encode (Prompt)"
+    }
+  },
+  "137": {
+    "inputs": {
+      "model": [
+        "196",
+        0
+      ],
+      "conditioning": [
+        "147",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicGuider",
+    "_meta": {
+      "title": "☁️BizyAir BasicGuider"
+    }
+  },
+  "138": {
+    "inputs": {
+      "unet_name": "flux/flux1-dev.sft",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "BizyAir_UNETLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load Diffusion Model"
+    }
+  },
+  "139": {
+    "inputs": {
+      "noise": [
+        "144",
+        0
+      ],
+      "guider": [
+        "137",
+        0
+      ],
+      "sampler": [
+        "145",
+        0
+      ],
+      "sigmas": [
+        "143",
+        0
+      ],
+      "latent_image": [
+        "140",
+        0
+      ]
+    },
+    "class_type": "BizyAir_SamplerCustomAdvanced",
+    "_meta": {
+      "title": "☁️BizyAir SamplerCustomAdvanced"
+    }
+  },
+  "140": {
+    "inputs": {
+      "width": [
+        "207",
+        0
+      ],
+      "height": [
+        "208",
+        0
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "空Latent"
+    }
+  },
+  "141": {
+    "inputs": {
+      "samples": [
+        "139",
+        0
+      ],
+      "vae": [
+        "142",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Decode"
+    }
+  },
+  "142": {
+    "inputs": {
+      "vae_name": "flux/ae.sft"
+    },
+    "class_type": "BizyAir_VAELoader",
+    "_meta": {
+      "title": "☁️BizyAir Load VAE"
+    }
+  },
+  "143": {
+    "inputs": {
+      "scheduler": "normal",
+      "steps": 20,
+      "denoise": 1,
+      "model": [
+        "196",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicScheduler",
+    "_meta": {
+      "title": "☁️BizyAir BasicScheduler"
+    }
+  },
+  "144": {
+    "inputs": {
+      "noise_seed": [
+        "206",
+        0
+      ]
+    },
+    "class_type": "BizyAir_RandomNoise",
+    "_meta": {
+      "title": "☁️BizyAir RandomNoise"
+    }
+  },
+  "145": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "BizyAir_KSamplerSelect",
+    "_meta": {
+      "title": "☁️BizyAir KSamplerSelect"
+    }
+  },
+  "147": {
+    "inputs": {
+      "guidance": 3.5,
+      "conditioning": [
+        "136",
+        0
+      ]
+    },
+    "class_type": "BizyAir_FluxGuidance",
+    "_meta": {
+      "title": "☁️BizyAir FluxGuidance"
+    }
+  },
+  "150": {
+    "inputs": {
+      "model": "deepseek-ai/DeepSeek-V2.5",
+      "system_prompt": "# Role: 人像摄影师\n\n你是一位资深的人像摄影师，是定格美丽的专家，用相机记录每一个独特的瞬间和情感。\n\n## Rules\n- 一张照片的内容包含：shot + 人物(gender、age、nationality) + hair_style + clothes + style\n- 如果人像是女性，考虑加入<makeup>\n- 根据用户输入的内容，酌情考虑是否增加<model_pose>，让照片整体更美。\n- 内容项请参考 <reference document>\n- 照片内容要使用英文描述，整体要合理。\n- 返回`json`格式。\n\n## reference document\n```json\n\n  \"gender\": [\"male\", \"female\"],\n  \"age\": [\"18-25\", \"25-35\", \"35-45\", \"45-60\", \"60-70\"],\n  \"nationality\": [\"Chinese\", \"Japanese\", \"Korean\", \"Russian\", \"Iranian\"],\n  \"clothes\": [\"Business Casual\", \"Business Formal\", \"Business Professional\", \"Casual Chic\", \"Formal\", \"Smart Casual\", \"Sporty\", \"Streetwear\"],\n  \"hair_length\": [\"short\", \"medium\", \"long\"],\n  \"hair_style\": [\"Short\", \"Bangs\", \"Bob\", \"Braided pigtails\", \"Cornrows\", \"High ponytail\", \"Long ponytail\", \"Long straight\", \"Shoulder Length with Bangs\", \"Shoulder length straight\", \"Updo\", \"Wavy\", \"Wavy undercut\"],\n  \"makeup\": [\"Artistic Makeup\", \"Avant-garde Makeup\", \"Boho Makeup\", \"Classic Makeup\", \"Dewy Makeup\", \"Edgy Makeup\", \"Glam Makeup\", \"Natural Makeup\"],\n  \"shot\": [\"Head portrait\", \"Head and shoulders portrait\", \"Half-length portrait\", \"Full-length portrait\", \"Face\", \"Portrait\", \"Full body\", \"Close-up\"],\n  \"style\": [\"Black and White Photography\", \"CineStyle\", \"Cool Blue Tint\", \"Duotone\", \"Fashion Photography\", \"Golden Hour Glow\", \"HDR Photography\", \"High Key\", \"Lomo\", \"Lomography\", \"Low Key\", \"Matte Finish\", \"Minimalist Photography\", \"Monochromatic Photography\", \"Muted Colors\", \"Nature Photography\", \"Polaroid\", \"Polaroid Photography\", \"Vintage Photography\"],\n  \"model_pose\": [\"Adjusting Clothing Pose\",\"Against a Wall Pose\",\"Ajusting Hair Pose\",\"Arms Up Pose\",\"Casual Stroll Pose\",\"Fashion Model Pose\",\"Feminine Pose\",\"Flipping Hair Pose\",\"Glamour Pose\",\"Hand-on-Hip Pose\",\"High Fashion Pose\",\"Holding Bag Pose\",\"Sitting Cross-Legged Pose\",\"Sitting Pose\",\"Touching Hair Pose\",\"Vogue Pose\",\"Walking Pose\",\"Waving Hand Pose\"]\n\n```\n\n## Return format\n```json\n[\n  \"prompt\":\"\",\n]\n```",
+      "user_prompt": [
+        "197",
+        0
+      ],
+      "max_tokens": 350,
+      "temperature": 0.7000000000000001
+    },
+    "class_type": "BizyAirSiliconCloudLLMAPI",
+    "_meta": {
+      "title": "☁️BizyAir SiliconCloud LLM API"
+    }
+  },
+  "163": {
+    "inputs": {
+      "number_of_faces": 5,
+      "scale_factor": 1.5,
+      "shift_factor": 0.45,
+      "start_index": 0,
+      "max_faces_per_image": 50,
+      "aspect_ratio": "1:1",
+      "image": [
+        "200",
+        0
+      ]
+    },
+    "class_type": "AutoCropFaces",
+    "_meta": {
+      "title": "Auto Crop Faces"
+    }
+  },
+  "164": {
+    "inputs": {
+      "image1": [
+        "163",
+        0
+      ],
+      "image2": [
+        "167",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "图像组合批次"
+    }
+  },
+  "165": {
+    "inputs": {
+      "image1": [
+        "164",
+        0
+      ],
+      "image2": [
+        "169",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "图像组合批次"
+    }
+  },
+  "167": {
+    "inputs": {
+      "number_of_faces": 5,
+      "scale_factor": 1.5,
+      "shift_factor": 0.45,
+      "start_index": 0,
+      "max_faces_per_image": 50,
+      "aspect_ratio": "1:1",
+      "image": [
+        "201",
+        0
+      ]
+    },
+    "class_type": "AutoCropFaces",
+    "_meta": {
+      "title": "Auto Crop Faces"
+    }
+  },
+  "169": {
+    "inputs": {
+      "image1": [
+        "170",
+        0
+      ],
+      "image2": [
+        "172",
+        0
+      ]
+    },
+    "class_type": "ImageBatch",
+    "_meta": {
+      "title": "图像组合批次"
+    }
+  },
+  "170": {
+    "inputs": {
+      "number_of_faces": 5,
+      "scale_factor": 1.5,
+      "shift_factor": 0.45,
+      "start_index": 0,
+      "max_faces_per_image": 50,
+      "aspect_ratio": "1:1",
+      "image": [
+        "198",
+        0
+      ]
+    },
+    "class_type": "AutoCropFaces",
+    "_meta": {
+      "title": "Auto Crop Faces"
+    }
+  },
+  "172": {
+    "inputs": {
+      "number_of_faces": 5,
+      "scale_factor": 1.5,
+      "shift_factor": 0.45,
+      "start_index": 0,
+      "max_faces_per_image": 50,
+      "aspect_ratio": "1:1",
+      "image": [
+        "199",
+        0
+      ]
+    },
+    "class_type": "AutoCropFaces",
+    "_meta": {
+      "title": "Auto Crop Faces"
+    }
+  },
+  "195": {
+    "inputs": {
+      "share_id": "cm1uc7lgx00su7jf390delfaj",
+      "lora_name": "Flux/墨幽-F.1-网图_V1.Lora.safetensors",
+      "strength_model": 1,
+      "strength_clip": 1,
+      "model": [
+        "138",
+        0
+      ],
+      "clip": [
+        "135",
+        0
+      ]
+    },
+    "class_type": "BizyAir_SharedLoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Shared Lora Loader"
+    }
+  },
+  "196": {
+    "inputs": {
+      "share_id": "cm1uc7lgx00su7jf390delfaj",
+      "lora_name": "Flux/Hanfu_NSFW_epoch_18.safetensors",
+      "strength_model": 0.5,
+      "strength_clip": 1,
+      "model": [
+        "195",
+        0
+      ],
+      "clip": [
+        "195",
+        1
+      ]
+    },
+    "class_type": "BizyAir_SharedLoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Shared Lora Loader"
+    }
+  },
+  "197": {
+    "inputs": {
+      "text": ""
+    },
+    "class_type": "CR Text",
+    "_meta": {
+      "title": "🐉Prompt"
+    }
+  },
+  "198": {
+    "inputs": {
+      "url": "url or path"
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No3"
+    }
+  },
+  "199": {
+    "inputs": {
+      "url": "url or path"
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No4"
+    }
+  },
+  "200": {
+    "inputs": {
+      "url": "url or path"
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No1"
+    }
+  },
+  "201": {
+    "inputs": {
+      "url": "url or path"
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No2"
+    }
+  },
+  "204": {
+    "inputs": {
+      "text1": [
+        "205",
+        0
+      ],
+      "text2": [
+        "150",
+        0
+      ],
+      "separator": ""
+    },
+    "class_type": "CR Text Concatenate",
+    "_meta": {
+      "title": "文本联结"
+    }
+  },
+  "205": {
+    "inputs": {
+      "text": ""
+    },
+    "class_type": "CR Text",
+    "_meta": {
+      "title": "Lora激活词"
+    }
+  },
+  "206": {
+    "inputs": {
+      "integer": 1,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
+    }
+  },
+  "207": {
+    "inputs": {
+      "integer": 1280,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Width"
+    }
+  },
+  "208": {
+    "inputs": {
+      "integer": 1280,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Height"
+    }
+  },
+  "209": {
+    "inputs": {
+      "images": [
+        "96",
+        0
+      ]
+    },
+    "class_type": "SaveImageWebsocket",
+    "_meta": {
+      "title": "保存图像到网络接口"
+    }
+  }
+}

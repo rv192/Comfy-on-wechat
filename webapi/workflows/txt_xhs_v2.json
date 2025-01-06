@@ -1,0 +1,263 @@
+{
+  "1": {
+    "inputs": {
+      "clip_l": [
+        "105",
+        0
+      ],
+      "t5xxl": [
+        "105",
+        0
+      ],
+      "guidance": 3.5,
+      "clip": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "☁️BizyAir CLIPTextEncodeFlux"
+    }
+  },
+  "2": {
+    "inputs": {
+      "width": [
+        "101",
+        0
+      ],
+      "height": [
+        "102",
+        0
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "空Latent"
+    }
+  },
+  "3": {
+    "inputs": {
+      "noise_seed": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "BizyAir_RandomNoise",
+    "_meta": {
+      "title": "☁️BizyAir RandomNoise"
+    }
+  },
+  "36": {
+    "inputs": {
+      "clip_name1": "t5xxl_fp16.safetensors",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "BizyAir_DualCLIPLoader",
+    "_meta": {
+      "title": "☁️BizyAir DualCLIPLoader"
+    }
+  },
+  "47": {
+    "inputs": {
+      "model": [
+        "61",
+        0
+      ],
+      "conditioning": [
+        "1",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicGuider",
+    "_meta": {
+      "title": "☁️BizyAir BasicGuider"
+    }
+  },
+  "48": {
+    "inputs": {
+      "unet_name": "flux/flux1-dev.sft",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "BizyAir_UNETLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load Diffusion Model"
+    }
+  },
+  "50": {
+    "inputs": {
+      "noise": [
+        "3",
+        0
+      ],
+      "guider": [
+        "47",
+        0
+      ],
+      "sampler": [
+        "60",
+        0
+      ],
+      "sigmas": [
+        "58",
+        0
+      ],
+      "latent_image": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "BizyAir_SamplerCustomAdvanced",
+    "_meta": {
+      "title": "☁️BizyAir SamplerCustomAdvanced"
+    }
+  },
+  "54": {
+    "inputs": {
+      "samples": [
+        "50",
+        0
+      ],
+      "vae": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Decode"
+    }
+  },
+  "55": {
+    "inputs": {
+      "vae_name": "flux/ae.sft"
+    },
+    "class_type": "BizyAir_VAELoader",
+    "_meta": {
+      "title": "☁️BizyAir Load VAE"
+    }
+  },
+  "58": {
+    "inputs": {
+      "scheduler": "beta",
+      "steps": 25,
+      "denoise": 1,
+      "model": [
+        "61",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicScheduler",
+    "_meta": {
+      "title": "☁️BizyAir BasicScheduler"
+    }
+  },
+  "60": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "BizyAir_KSamplerSelect",
+    "_meta": {
+      "title": "☁️BizyAir KSamplerSelect"
+    }
+  },
+  "61": {
+    "inputs": {
+      "lora_name": "苏-FLUX小红书极致真实",
+      "strength_model": 0.8,
+      "strength_clip": 1,
+      "model_version_id": 12970,
+      "model": [
+        "48",
+        0
+      ],
+      "clip": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "BizyAir_LoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load LoRA"
+    }
+  },
+  "99": {
+    "inputs": {
+      "images": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "SaveImageWebsocket",
+    "_meta": {
+      "title": "保存图像到网络接口"
+    }
+  },
+  "100": {
+    "inputs": {
+      "text": ""
+    },
+    "class_type": "CR Text",
+    "_meta": {
+      "title": "🐉Prompt"
+    }
+  },
+  "101": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Width"
+    }
+  },
+  "102": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Height"
+    }
+  },
+  "103": {
+    "inputs": {
+      "integer": 0,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
+    }
+  },
+  "104": {
+    "inputs": {
+      "prompt": "1girl, photography, film grain, grainy, trendy"
+    },
+    "class_type": "CR Prompt Text",
+    "_meta": {
+      "title": "Lora激活词"
+    }
+  },
+  "105": {
+    "inputs": {
+      "text1": [
+        "104",
+        0
+      ],
+      "text2": [
+        "100",
+        0
+      ],
+      "separator": ","
+    },
+    "class_type": "CR Text Concatenate",
+    "_meta": {
+      "title": "🔤 CR Text Concatenate"
+    }
+  }
+}

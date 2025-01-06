@@ -1,8 +1,14 @@
 {
   "1": {
     "inputs": {
-      "clip_l": "",
-      "t5xxl": "",
+      "clip_l": [
+        "104",
+        0
+      ],
+      "t5xxl": [
+        "104",
+        0
+      ],
       "guidance": 3.5,
       "clip": [
         "36",
@@ -16,8 +22,14 @@
   },
   "2": {
     "inputs": {
-      "width": 1024,
-      "height": 1024,
+      "width": [
+        "100",
+        0
+      ],
+      "height": [
+        "101",
+        0
+      ],
       "batch_size": 1
     },
     "class_type": "EmptyLatentImage",
@@ -27,7 +39,10 @@
   },
   "3": {
     "inputs": {
-      "noise_seed": 287175638793325
+      "noise_seed": [
+        "102",
+        0
+      ]
     },
     "class_type": "BizyAir_RandomNoise",
     "_meta": {
@@ -178,6 +193,71 @@
     "class_type": "SaveImageWebsocket",
     "_meta": {
       "title": "保存图像到网络接口"
+    }
+  },
+  "100": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Width"
+    }
+  },
+  "101": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Height"
+    }
+  },
+  "102": {
+    "inputs": {
+      "integer": 0,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
+    }
+  },
+  "103": {
+    "inputs": {
+      "text": ""
+    },
+    "class_type": "CR Text",
+    "_meta": {
+      "title": "🐉Prompt"
+    }
+  },
+  "104": {
+    "inputs": {
+      "text1": [
+        "105",
+        0
+      ],
+      "text2": [
+        "103",
+        0
+      ],
+      "separator": ","
+    },
+    "class_type": "CR Text Concatenate",
+    "_meta": {
+      "title": "🔤 CR Text Concatenate"
+    }
+  },
+  "105": {
+    "inputs": {
+      "prompt": "smoke style, ink art, Chinese ink wash, black and white"
+    },
+    "class_type": "CR Prompt Text",
+    "_meta": {
+      "title": "Lora激活词"
     }
   }
 }

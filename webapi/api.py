@@ -9,7 +9,6 @@ import uuid
 from datetime import datetime
 from PIL import Image
 from io import BytesIO
-import psutil
 import gc
 from fastapi.responses import JSONResponse
 
@@ -63,22 +62,6 @@ async def check_request_body_size(request: Request, call_next):
                     status_code=413,
                     content={"detail": "请求体太大"}
                 )
-    response = await call_next(request)
-    return response
-
-
-@app.middleware("http")
-async def monitor_memory(request: Request, call_next):
-    # 获取当前内存使用情况
-    memory = psutil.Process().memory_info()
-    if memory.rss > 1024 * 1024 * 1024 * 2:  # 如果内存使用超过2GB
-        gc.collect()  # 强制垃圾回收
-        if memory.rss > 1024 * 1024 * 1024 * 2:
-            return JSONResponse(
-                status_code=503,
-                content={"detail": "服务器资源不足，请稍后重试"}
-            )
-    
     response = await call_next(request)
     return response
 
@@ -138,6 +121,25 @@ async def comfy_gen(req: ComfyGenReq) -> dict:
     """通用 ComfyUI 生成接口"""
     try:
         imgs = bizy_air.comfyGen(req.workflow_name, req.prompt, req.img_content)
+        if len(imgs) > 0:
+            image_url = save_image_and_get_url(imgs[0])
+            return {"image_url": image_url, "status": "ok"}
+        return {"status": "error", "detail": "生成图片列表为空"}
+    except Exception as e:
+        logger.error(f"ComfyUI 生成出错: {e}")
+        return {"status": "error", "detail": f"ComfyUI 生成失败: {e}"}
+
+@app.post("/comfy_gen_v2", summary="通用 ComfyUI 生成 V2")
+async def comfy_gen_v2(req: ComfyGenV2Req) -> dict:
+    """通用 ComfyUI 生成接口 V2"""
+    try:
+        imgs = bizy_air.comfyGenV2(
+            req.workflow_name,
+            req.prompt,
+            req.width,
+            req.height,
+            req.urls
+        )
         if len(imgs) > 0:
             image_url = save_image_and_get_url(imgs[0])
             return {"image_url": image_url, "status": "ok"}

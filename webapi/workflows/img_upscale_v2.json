@@ -1,24 +1,4 @@
 {
-  "2": {
-    "inputs": {
-      "width": 768,
-      "height": 1024,
-      "batch_size": 1
-    },
-    "class_type": "EmptyLatentImage",
-    "_meta": {
-      "title": "空Latent"
-    }
-  },
-  "3": {
-    "inputs": {
-      "noise_seed": 83218084323110
-    },
-    "class_type": "BizyAir_RandomNoise",
-    "_meta": {
-      "title": "☁️BizyAir RandomNoise"
-    }
-  },
   "36": {
     "inputs": {
       "clip_name1": "t5xxl_fp16.safetensors",
@@ -32,33 +12,28 @@
   },
   "37": {
     "inputs": {
-      "clip_l": [
-        "101",
+      "text": [
+        "74",
         0
       ],
-      "t5xxl": [
-        "101",
-        0
-      ],
-      "guidance": 3.5,
       "clip": [
         "36",
         0
       ]
     },
-    "class_type": "BizyAir_CLIPTextEncodeFlux",
+    "class_type": "BizyAir_CLIPTextEncode",
     "_meta": {
-      "title": "☁️BizyAir CLIPTextEncodeFlux"
+      "title": "☁️BizyAir CLIP Text Encode (Prompt)"
     }
   },
   "47": {
     "inputs": {
       "model": [
-        "61",
+        "48",
         0
       ],
       "conditioning": [
-        "37",
+        "69",
         0
       ]
     },
@@ -70,7 +45,7 @@
   "48": {
     "inputs": {
       "unet_name": "flux/flux1-dev.sft",
-      "weight_dtype": "fp8_e4m3fn"
+      "weight_dtype": "default"
     },
     "class_type": "BizyAir_UNETLoader",
     "_meta": {
@@ -80,7 +55,7 @@
   "50": {
     "inputs": {
       "noise": [
-        "3",
+        "59",
         0
       ],
       "guider": [
@@ -96,7 +71,7 @@
         0
       ],
       "latent_image": [
-        "2",
+        "71",
         0
       ]
     },
@@ -133,10 +108,10 @@
   "58": {
     "inputs": {
       "scheduler": "beta",
-      "steps": 25,
-      "denoise": 1,
+      "steps": 20,
+      "denoise": 0.8,
       "model": [
-        "61",
+        "48",
         0
       ]
     },
@@ -145,65 +120,112 @@
       "title": "☁️BizyAir BasicScheduler"
     }
   },
+  "59": {
+    "inputs": {
+      "noise_seed": [
+        "80",
+        0
+      ]
+    },
+    "class_type": "BizyAir_RandomNoise",
+    "_meta": {
+      "title": "☁️BizyAir RandomNoise"
+    }
+  },
   "60": {
     "inputs": {
-      "sampler_name": "euler"
+      "sampler_name": "deis"
     },
     "class_type": "BizyAir_KSamplerSelect",
     "_meta": {
       "title": "☁️BizyAir KSamplerSelect"
     }
   },
-  "61": {
+  "69": {
     "inputs": {
-      "lora_name": "水墨融合风格效果强化F.1_1.0",
-      "strength_model": 0.8,
-      "strength_clip": 1,
-      "model_version_id": 9225,
-      "model": [
-        "48",
+      "strength": 0.9,
+      "start_percent": 0,
+      "end_percent": 1,
+      "positive": [
+        "37",
         0
       ],
-      "clip": [
-        "36",
+      "negative": [
+        "70",
         0
-      ]
-    },
-    "class_type": "BizyAir_LoraLoader",
-    "_meta": {
-      "title": "☁️BizyAir Load LoRA"
-    }
-  },
-  "63": {
-    "inputs": {
-      "do_sample": true,
-      "temperature": 0.5,
-      "max_tokens": 256,
-      "caption_type": "Descriptive",
-      "caption_length": "any",
-      "extra_options": "If there is a person/character in the image you must refer to them as {name}.",
-      "name_input": "Jack",
-      "custom_prompt": "",
+      ],
+      "control_net": [
+        "75",
+        0
+      ],
+      "vae": [
+        "55",
+        0
+      ],
       "image": [
-        "100",
+        "79",
         0
       ]
     },
-    "class_type": "BizyAirJoyCaption2",
+    "class_type": "BizyAir_ControlNetApplySD3",
     "_meta": {
-      "title": "☁️BizyAir Joy Caption2"
+      "title": "☁️BizyAir Apply Controlnet with VAE"
     }
   },
-  "65": {
+  "70": {
     "inputs": {
-      "images": ""
+      "conditioning": [
+        "37",
+        0
+      ]
     },
-    "class_type": "NTL_LoadImagesBase64",
+    "class_type": "BizyAir_ConditioningZeroOut",
     "_meta": {
-      "title": "ntl Load Images (Base64)"
+      "title": "☁️BizyAir ConditioningZeroOut"
     }
   },
-  "99": {
+  "71": {
+    "inputs": {
+      "pixels": [
+        "79",
+        0
+      ],
+      "vae": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEEncode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Encode"
+    }
+  },
+  "74": {
+    "inputs": {
+      "do_sample": "enable",
+      "temperature": 1,
+      "max_tokens": 256,
+      "image": [
+        "79",
+        0
+      ]
+    },
+    "class_type": "BizyAirJoyCaption",
+    "_meta": {
+      "title": "☁️BizyAir Joy Caption"
+    }
+  },
+  "75": {
+    "inputs": {
+      "control_net_name": "Flux1-dev-Controlnet-Upscaler/Flux.1-dev-Controlnet-Upscaler.safetensors",
+      "share_id": "clw9nhcdd0000qnkuo37strl5"
+    },
+    "class_type": "BizyAir_SharedControlNetLoader",
+    "_meta": {
+      "title": "☁️BizyAir Shared Load ControlNet Model"
+    }
+  },
+  "77": {
     "inputs": {
       "images": [
         "54",
@@ -212,19 +234,28 @@
     },
     "class_type": "SaveImageWebsocket",
     "_meta": {
-      "title": "保存图像到网络接口"
+      "title": "保存图像（网络接口）"
     }
   },
-  "100": {
+  "78": {
     "inputs": {
-      "width": 1024,
-      "height": 1024,
+      "url": ""
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No1"
+    }
+  },
+  "79": {
+    "inputs": {
+      "width": 1536,
+      "height": 1536,
       "interpolation": "lanczos",
       "method": "keep proportion",
       "condition": "downscale if bigger",
       "multiple_of": 0,
       "image": [
-        "65",
+        "78",
         0
       ]
     },
@@ -233,30 +264,14 @@
       "title": "🔧 Image Resize"
     }
   },
-  "101": {
+  "80": {
     "inputs": {
-      "text1": [
-        "102",
-        0
-      ],
-      "text2": [
-        "63",
-        0
-      ],
-      "separator": ","
+      "integer": 1024,
+      "multiple": 1
     },
-    "class_type": "CR Text Concatenate",
+    "class_type": "CR Integer Multiple",
     "_meta": {
-      "title": "🔤 CR Text Concatenate"
-    }
-  },
-  "102": {
-    "inputs": {
-      "prompt": "smoke style, ink art, Chinese ink wash, black and white"
-    },
-    "class_type": "CR Prompt Text",
-    "_meta": {
-      "title": "⚙️ CR Prompt Text"
+      "title": "🐉Seed"
     }
   }
 }
