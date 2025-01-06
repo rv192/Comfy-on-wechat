@@ -1,5 +1,5 @@
 websocket-client
-requests
+requests>=2.31.0
 pyyaml
 pillow
 fastapi

@@ -1,0 +1,373 @@
+{
+  "36": {
+    "inputs": {
+      "clip_name1": "t5xxl_fp8_e4m3fn.safetensors",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "BizyAir_DualCLIPLoader",
+    "_meta": {
+      "title": "☁️BizyAir DualCLIPLoader"
+    }
+  },
+  "47": {
+    "inputs": {
+      "model": [
+        "91",
+        0
+      ],
+      "conditioning": [
+        "103",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicGuider",
+    "_meta": {
+      "title": "☁️BizyAir BasicGuider"
+    }
+  },
+  "48": {
+    "inputs": {
+      "unet_name": "flux/flux1-dev.sft",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "BizyAir_UNETLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load Diffusion Model"
+    }
+  },
+  "50": {
+    "inputs": {
+      "noise": [
+        "59",
+        0
+      ],
+      "guider": [
+        "47",
+        0
+      ],
+      "sampler": [
+        "60",
+        0
+      ],
+      "sigmas": [
+        "58",
+        0
+      ],
+      "latent_image": [
+        "51",
+        0
+      ]
+    },
+    "class_type": "BizyAir_SamplerCustomAdvanced",
+    "_meta": {
+      "title": "☁️BizyAir SamplerCustomAdvanced"
+    }
+  },
+  "51": {
+    "inputs": {
+      "width": [
+        "110",
+        0
+      ],
+      "height": [
+        "111",
+        0
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "空潜空间图像"
+    }
+  },
+  "54": {
+    "inputs": {
+      "samples": [
+        "50",
+        0
+      ],
+      "vae": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Decode"
+    }
+  },
+  "55": {
+    "inputs": {
+      "vae_name": "flux/ae.sft"
+    },
+    "class_type": "BizyAir_VAELoader",
+    "_meta": {
+      "title": "☁️BizyAir Load VAE"
+    }
+  },
+  "58": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": 25,
+      "denoise": 1,
+      "model": [
+        "91",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicScheduler",
+    "_meta": {
+      "title": "☁️BizyAir BasicScheduler"
+    }
+  },
+  "59": {
+    "inputs": {
+      "noise_seed": [
+        "112",
+        0
+      ]
+    },
+    "class_type": "BizyAir_RandomNoise",
+    "_meta": {
+      "title": "☁️BizyAir RandomNoise"
+    }
+  },
+  "60": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "BizyAir_KSamplerSelect",
+    "_meta": {
+      "title": "☁️BizyAir KSamplerSelect"
+    }
+  },
+  "87": {
+    "inputs": {
+      "lora_name": "写实风格aeshteticv5",
+      "strength_model": 0.8,
+      "strength_clip": 1,
+      "model_version_id": 10325,
+      "model": [
+        "48",
+        0
+      ],
+      "clip": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "BizyAir_LoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load LoRA"
+    }
+  },
+  "88": {
+    "inputs": {
+      "pulid_file": "pulid_flux.safetensors"
+    },
+    "class_type": "BizyAir_PulidFluxModelLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load PuLID Flux Model"
+    }
+  },
+  "89": {
+    "inputs": {},
+    "class_type": "BizyAir_PulidFluxEvaClipLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load Eva Clip (PuLID Flux)"
+    }
+  },
+  "90": {
+    "inputs": {
+      "provider": "CUDA"
+    },
+    "class_type": "BizyAir_PulidFluxInsightFaceLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load InsightFace (PuLID Flux)"
+    }
+  },
+  "91": {
+    "inputs": {
+      "weight": 0.8,
+      "start_at": 0,
+      "end_at": 1,
+      "model": [
+        "106",
+        0
+      ],
+      "pulid_flux": [
+        "88",
+        0
+      ],
+      "eva_clip": [
+        "89",
+        0
+      ],
+      "face_analysis": [
+        "90",
+        0
+      ],
+      "image": [
+        "108",
+        0
+      ]
+    },
+    "class_type": "BizyAir_ApplyPulidFlux",
+    "_meta": {
+      "title": "☁️BizyAir Apply PuLID Flux"
+    }
+  },
+  "103": {
+    "inputs": {
+      "text": [
+        "117",
+        0
+      ],
+      "clip": [
+        "106",
+        1
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncode",
+    "_meta": {
+      "title": "☁️BizyAir CLIP Text Encode (Prompt)"
+    }
+  },
+  "106": {
+    "inputs": {
+      "lora_name": "商业级别写实Photography_for_Flux",
+      "strength_model": 0,
+      "strength_clip": 1,
+      "model_version_id": 10326,
+      "model": [
+        "87",
+        0
+      ],
+      "clip": [
+        "87",
+        1
+      ]
+    },
+    "class_type": "BizyAir_LoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load LoRA"
+    }
+  },
+  "108": {
+    "inputs": {
+      "width": 1280,
+      "height": 1280,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "downscale if bigger",
+      "multiple_of": 0,
+      "image": [
+        "109",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  },
+  "109": {
+    "inputs": {
+      "url": ""
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No1"
+    }
+  },
+  "110": {
+    "inputs": {
+      "integer": 1280,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Width"
+    }
+  },
+  "111": {
+    "inputs": {
+      "integer": 1280,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Height"
+    }
+  },
+  "112": {
+    "inputs": {
+      "integer": 1280,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
+    }
+  },
+  "114": {
+    "inputs": {
+      "images": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "SaveImageWebsocket",
+    "_meta": {
+      "title": "保存图像Websocket"
+    }
+  },
+  "115": {
+    "inputs": {
+      "url": ""
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No2"
+    }
+  },
+  "116": {
+    "inputs": {
+      "width": 1280,
+      "height": 1280,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "downscale if bigger",
+      "multiple_of": 0,
+      "image": [
+        "115",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  },
+  "117": {
+    "inputs": {
+      "do_sample": true,
+      "temperature": 0.5,
+      "max_tokens": 256,
+      "caption_type": "Descriptive",
+      "caption_length": "any",
+      "extra_options": "If there is a person/character in the image you must refer to them as {name}.",
+      "name_input": "Jack",
+      "custom_prompt": "",
+      "image": [
+        "116",
+        0
+      ]
+    },
+    "class_type": "BizyAirJoyCaption2",
+    "_meta": {
+      "title": "☁️BizyAir Joy Caption2"
+    }
+  }
+}

@@ -7,17 +7,16 @@ import urllib.request
 import urllib.parse
 from rich.console import Console
 
-
 console = Console()
 
-
 class ComfyuiClient(object):
-    def __init__(self, server: str = "127.0.0.1:8188"):
+    def __init__(self, server: str = "8.155.23.126:8188"):
         # 8.155.23.126:8188
         self.server_address = server
         self.client_id = str(uuid.uuid4())
         self.ws = websocket.WebSocket()
         self.ws.connect("ws://{}/ws?clientId={}".format(self.server_address, self.client_id))
+        self.workflow_name = "未命名工作流"
 
     def queue_prompt(self, prompt):
         p = {"prompt": prompt, "client_id": self.client_id}
@@ -25,7 +24,11 @@ class ComfyuiClient(object):
         req = urllib.request.Request(f"http://{self.server_address}/prompt", data=data, method='POST')
         return json.loads(urllib.request.urlopen(req).read())
 
-    def get_images(self, prompt, image_websocket_node):
+    def get_images(self, prompt, image_websocket_node, workflow_name: str = None):
+        if workflow_name:
+            self.workflow_name = workflow_name
+            console.print(f"\n>>> 🚀 开始执行工作流: {self.workflow_name}")
+            
         prompt_id = self.queue_prompt(prompt)['prompt_id']
         output_images = {}
         current_node = ""

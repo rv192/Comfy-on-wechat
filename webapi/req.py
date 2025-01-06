@@ -22,3 +22,11 @@ class ComfyGenReq(BaseModel):
     workflow_name: str = Field(description="工作流名称")
     prompt: str = Field(description="生成提示词")
     img_content: str = Field(description="输入图片的base64字符串列表")
+
+class ComfyGenV2Req(BaseModel):
+    """通用 ComfyUI 生成请求体 V2"""
+    workflow_name: str = Field(description="工作流名称")
+    prompt: str = Field(description="生成提示词")
+    width: int = Field(default=1024, description="生成图片宽度")
+    height: int = Field(default=1024, description="生成图片高度") 
+    urls: Optional[str] = Field(None, description="输入图片URL,多个URL用|分隔")

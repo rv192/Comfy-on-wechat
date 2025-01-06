@@ -1,8 +1,14 @@
 {
   "2": {
     "inputs": {
-      "width": 768,
-      "height": 1024,
+      "width": [
+        "103",
+        0
+      ],
+      "height": [
+        "104",
+        0
+      ],
       "batch_size": 1
     },
     "class_type": "EmptyLatentImage",
@@ -12,7 +18,10 @@
   },
   "3": {
     "inputs": {
-      "noise_seed": 535753138486017
+      "noise_seed": [
+        "105",
+        0
+      ]
     },
     "class_type": "BizyAir_RandomNoise",
     "_meta": {
@@ -194,15 +203,6 @@
       "title": "☁️BizyAir Joy Caption2"
     }
   },
-  "65": {
-    "inputs": {
-      "images": ""
-    },
-    "class_type": "NTL_LoadImagesBase64",
-    "_meta": {
-      "title": "ntl Load Images (Base64)"
-    }
-  },
   "99": {
     "inputs": {
       "images": [
@@ -224,7 +224,7 @@
       "condition": "downscale if bigger",
       "multiple_of": 0,
       "image": [
-        "65",
+        "106",
         0
       ]
     },
@@ -252,11 +252,50 @@
   },
   "102": {
     "inputs": {
-      "prompt": "1girl"
+      "prompt": "1girl, photography, film grain, grainy, trendy"
     },
     "class_type": "CR Prompt Text",
     "_meta": {
-      "title": "⚙️ CR Prompt Text"
+      "title": "Lora激活词"
+    }
+  },
+  "103": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Width"
+    }
+  },
+  "104": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Height"
+    }
+  },
+  "105": {
+    "inputs": {
+      "integer": 0,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
+    }
+  },
+  "106": {
+    "inputs": {
+      "url": "https://gd-hbimg.huaban.com/869ed2a30084fcc68e6f2da140415cff0661bab6d6ee-JGGeMJ_fw1200webp"
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No1"
     }
   }
 }
