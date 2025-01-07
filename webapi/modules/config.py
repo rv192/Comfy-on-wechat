@@ -22,29 +22,31 @@ class Config:
             with open(config_path, 'r', encoding='utf-8') as f:
                 self._config = json.load(f)
         except FileNotFoundError:
-            raise Exception(f"配置文件不存在: {config_path}")
+            logger.warning(f"配置文件不存在: {config_path}，将使用默认配置")
+            self._config = {}
         except json.JSONDecodeError:
-            raise Exception(f"配置文件格式错误: {config_path}")
+            logger.warning(f"配置文件格式错误: {config_path}，将使用默认配置")
+            self._config = {}
 
     @property
-    def comfyui_server(self) -> str:
+    def comfyui_srv(self) -> str:
         """获取 ComfyUI 服务器地址"""
-        return self._config.get('comfyui', {}).get('server', '127.0.0.1:8188')
+        return self._config.get('comfyui_srv', '127.0.0.1:8188')
+
+    @property
+    def webapi_host(self) -> str:
+        """获取 WebAPI 主机地址"""
+        return self._config.get('webapi', {}).get('host', '127.0.0.1')
+
+    @property
+    def webapi_port(self) -> int:
+        """获取 WebAPI 端口"""
+        return self._config.get('webapi', {}).get('port', 8008)
 
     @property
     def image_url_base(self) -> str:
         """获取图片基础 URL"""
-        return self._config.get('comfyui', {}).get('image_url_base', 'http://127.0.0.1:8188')
-
-    @property
-    def server_host(self) -> str:
-        """获取服务器主机地址"""
-        return self._config.get('server', {}).get('host', '0.0.0.0')
-
-    @property
-    def server_port(self) -> int:
-        """获取服务器端口"""
-        return self._config.get('server', {}).get('port', 8000)
+        return f"http://{self.webapi_host}:{self.webapi_port}/images/"
 
 # 创建全局配置实例
 config = Config() 

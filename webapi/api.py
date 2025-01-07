@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import Annotated, List
+from typing import Annotated, List, Dict
 from fastapi import FastAPI, Header, Response, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
@@ -15,12 +15,12 @@ from fastapi.responses import JSONResponse
 from log_conf import init_logger_config
 from modules import bizy_air
 from req import *
-
+from modules.config import config
 
 # 配置图片保存目录
 IMAGE_SAVE_DIR = "saved_images"
-# 配置图片URL基础路径，请根据实际情况修改，例如 "http://your_host:8008/images/"
-IMAGE_URL_BASE = "http://8.155.23.126:8008/images/"
+# 构建图片URL基础路径
+IMAGE_URL_BASE = config.image_url_base
 
 
 # 确保图片保存目录存在
@@ -153,12 +153,12 @@ if __name__ == '__main__':
     log_level = "debug"
     init_logger_config(level=log_level)
     
-    config = uvicorn.Config(
+    uvicorn_config = uvicorn.Config(
         app,
-        host="0.0.0.0",
-        port=8008,
+        host="0.0.0.0",  # 监听所有网络接口
+        port=config.webapi_port,
         log_level=log_level,
         timeout_keep_alive=120,
     )
-    server = uvicorn.Server(config)
+    server = uvicorn.Server(uvicorn_config)
     server.run()

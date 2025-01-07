@@ -12,7 +12,7 @@ console = Console()
 
 class ComfyuiClient(object):
     def __init__(self, server: str = None):
-        self.server_address = server or config.comfyui_server
+        self.server_address = server or config.comfyui_srv
         self.client_id = str(uuid.uuid4())
         self.ws = websocket.WebSocket()
         self.ws.connect("ws://{}/ws?clientId={}".format(self.server_address, self.client_id))
