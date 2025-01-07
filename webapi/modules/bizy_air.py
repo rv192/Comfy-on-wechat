@@ -119,6 +119,7 @@ def comfyGenV2(workflow_name: str, prompt: str = None, width: int = 1024, height
                 node_data["inputs"]["integer"] = utils.get_seed()
 
     # 处理图片输入
+    image_usage_info = None
     if urls:
         # 查找所有 BizyAir_LoadImageURL 节点并按 title 排序
         image_nodes = []
@@ -138,9 +139,13 @@ def comfyGenV2(workflow_name: str, prompt: str = None, width: int = 1024, height
             if url_list:
                 # 检查 URL 数量与节点数量的关系并记录日志
                 if len(url_list) < len(image_nodes):
-                    console.print(f"[yellow]警告: 提供的图片数量({len(url_list)})少于工作流所需数量({len(image_nodes)})，将循环使用已有图片[/yellow]")
+                    msg = f"提供的图片数量({len(url_list)})少于工作流所需数量({len(image_nodes)})，将循环使用已有图片"
+                    console.print(f"[yellow]警告: {msg}[/yellow]")
+                    image_usage_info = {"type": "cycle", "msg": msg}
                 elif len(url_list) > len(image_nodes):
-                    console.print(f"[yellow]警告: 提供的图片数量({len(url_list)})多于工作流所需数量({len(image_nodes)})，多余的图片将不会被使用[/yellow]")
+                    msg = f"提供的图片数量({len(url_list)})多于工作流所需数量({len(image_nodes)})，多余的图片将不会被使用"
+                    console.print(f"[yellow]警告: {msg}[/yellow]")
+                    image_usage_info = {"type": "truncate", "msg": msg}
                 
                 # 按排序后的顺序将URL分配给图片节点
                 for idx, node_id in enumerate(image_nodes):
@@ -152,9 +157,12 @@ def comfyGenV2(workflow_name: str, prompt: str = None, width: int = 1024, height
 
     try:
         images_dict = comfyui.get_images(payload, save_image_node, workflow_name)
-        return utils.receiving_image(images_dict)
+        images = utils.receiving_image(images_dict)
+        if image_usage_info:
+            return images, image_usage_info
+        return images, None
     except Exception as e:
         console.print(f"[red]错误: 获取图片失败: {e}[/red]")
     finally:
         comfyui.close()
-    return []
+    return [], None

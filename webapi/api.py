@@ -16,12 +16,15 @@ from log_conf import init_logger_config
 from modules import bizy_air
 from req import *
 from modules.config import config
+from modules.request_deduplication import RequestDeduplication
 
 # 配置图片保存目录
 IMAGE_SAVE_DIR = "saved_images"
 # 构建图片URL基础路径
 IMAGE_URL_BASE = config.image_url_base
 
+# 初始化请求去重处理器
+request_dedup = RequestDeduplication()
 
 # 确保图片保存目录存在
 if not os.path.exists(IMAGE_SAVE_DIR):
@@ -48,8 +51,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 设置最大请求体积为 100MB
-app.state.max_request_body_size = 100 * 1024 * 1024
+# 设置最大请求体积为 10MB
+app.state.max_request_body_size = 10 * 1024 * 1024
 
 @app.middleware("http")
 async def check_request_body_size(request: Request, call_next):
@@ -123,30 +126,64 @@ async def comfy_gen(req: ComfyGenReq) -> dict:
         imgs = bizy_air.comfyGen(req.workflow_name, req.prompt, req.img_content)
         if len(imgs) > 0:
             image_url = save_image_and_get_url(imgs[0])
-            return {"image_url": image_url, "status": "ok"}
-        return {"status": "error", "detail": "生成图片列表为空"}
+            return {"status": "ok", "image_url": image_url}
+        return {"status": "error", "msg": "生成图片列表为空"}
     except Exception as e:
         logger.error(f"ComfyUI 生成出错: {e}")
-        return {"status": "error", "detail": f"ComfyUI 生成失败: {e}"}
+        return {"status": "error", "msg": f"ComfyUI 生成失败: {e}"}
 
 @app.post("/comfy_gen_v2", summary="通用 ComfyUI 生成 V2")
 async def comfy_gen_v2(req: ComfyGenV2Req) -> dict:
     """通用 ComfyUI 生成接口 V2"""
     try:
-        imgs = bizy_air.comfyGenV2(
+        # 检查是否是重复请求
+        cached_result = request_dedup.check_request(
             req.workflow_name,
             req.prompt,
             req.width,
             req.height,
             req.urls
         )
+        
+        if cached_result:
+            logger.info(f"检测到重复请求，直接返回缓存结果")
+            return cached_result
+            
+        imgs, image_usage_info = bizy_air.comfyGenV2(
+            req.workflow_name,
+            req.prompt,
+            req.width,
+            req.height,
+            req.urls
+        )
+        
+        result = {}
         if len(imgs) > 0:
             image_url = save_image_and_get_url(imgs[0])
-            return {"image_url": image_url, "status": "ok"}
-        return {"status": "error", "detail": "生成图片列表为空"}
+            result = {
+                "status": "ok",
+                "image_url": image_url
+            }
+            # 如果有图片使用信息，添加到msg中
+            if image_usage_info:
+                result["msg"] = image_usage_info["msg"]
+        else:
+            result = {"status": "error", "msg": "生成图片列表为空"}
+            
+        # 更新请求记录的结果
+        request_dedup.update_result(
+            req.workflow_name,
+            req.prompt,
+            req.width,
+            req.height,
+            req.urls,
+            result
+        )
+        
+        return result
     except Exception as e:
         logger.error(f"ComfyUI 生成出错: {e}")
-        return {"status": "error", "detail": f"ComfyUI 生成失败: {e}"}
+        return {"status": "error", "msg": f"ComfyUI 生成失败: {e}"}
 
 
 if __name__ == '__main__':
