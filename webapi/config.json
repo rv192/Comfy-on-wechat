@@ -1,7 +1,7 @@
 {
-    "comfyui_srv": "8.155.23.126:8188",
+    "comfyui_srv": "127.0.0.1:8188",
     "webapi": {
-        "host": "192.168.5.175",
+        "host": "your host ip or domain",
         "port": 8008
     }
 } 
