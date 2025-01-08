@@ -10,6 +10,7 @@ from datetime import datetime
 from PIL import Image
 from io import BytesIO
 import gc
+import aiofiles
 from fastapi.responses import JSONResponse
 
 from log_conf import init_logger_config
@@ -74,8 +75,8 @@ async def root():
     return {"Hello": "comfyui-api", "version": "1.1.1"}
 
 
-def save_image_and_get_url(image_bytes: bytes) -> str:
-    """保存图片到服务器，并返回可访问的URL"""
+async def save_image_and_get_url(image_bytes: bytes) -> str:
+    """异步方式保存图片到服务器，并返回可访问的URL"""
     try:
         # 添加图片大小限制
         if len(image_bytes) > 10 * 1024 * 1024:  # 10MB
@@ -95,7 +96,14 @@ def save_image_and_get_url(image_bytes: bytes) -> str:
         filename = f"{timestamp}_{unique_id}.jpeg"
         file_path = os.path.join(IMAGE_SAVE_DIR, filename)
         
-        image.save(file_path, "JPEG")
+        # 使用BytesIO进行内存中的操作
+        img_byte_arr = BytesIO()
+        image.save(img_byte_arr, format='JPEG')
+        img_byte_arr = img_byte_arr.getvalue()
+
+        # 异步写入文件
+        async with aiofiles.open(file_path, 'wb') as f:
+            await f.write(img_byte_arr)
 
         # 生成可访问的图片URL
         image_url = f"{IMAGE_URL_BASE}{filename}"
@@ -112,20 +120,25 @@ def save_image_and_get_url(image_bytes: bytes) -> str:
 
 @app.get("/images/{filename}")
 async def get_image(filename: str):
-    """处理获取图片请求"""
+    """异步处理获取图片请求"""
     file_path = os.path.join(IMAGE_SAVE_DIR, filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="图片未找到")
-    with open(file_path, "rb") as f:
-        return Response(content=f.read(), media_type="image/jpeg")
+    try:
+        async with aiofiles.open(file_path, "rb") as f:
+            content = await f.read()
+            return Response(content=content, media_type="image/jpeg")
+    except Exception as e:
+        logger.error(f"读取图片时出错: {e}")
+        raise HTTPException(status_code=500, detail=f"读取图片失败: {e}")
 
 @app.post("/comfy_gen", summary="通用 ComfyUI 生成")
 async def comfy_gen(req: ComfyGenReq) -> dict:
     """通用 ComfyUI 生成接口"""
     try:
-        imgs = bizy_air.comfyGen(req.workflow_name, req.prompt, req.img_content)
+        imgs = await bizy_air.comfyGen(req.workflow_name, req.prompt, req.img_content)
         if len(imgs) > 0:
-            image_url = save_image_and_get_url(imgs[0])
+            image_url = await save_image_and_get_url(imgs[0])
             return {"status": "ok", "image_url": image_url}
         return {"status": "error", "msg": "生成图片列表为空"}
     except Exception as e:
@@ -149,7 +162,7 @@ async def comfy_gen_v2(req: ComfyGenV2Req) -> dict:
             logger.info(f"检测到重复请求，直接返回缓存结果")
             return cached_result
             
-        imgs, image_usage_info = bizy_air.comfyGenV2(
+        imgs, image_usage_info = await bizy_air.comfyGenV2(
             req.workflow_name,
             req.prompt,
             req.width,
@@ -159,7 +172,7 @@ async def comfy_gen_v2(req: ComfyGenV2Req) -> dict:
         
         result = {}
         if len(imgs) > 0:
-            image_url = save_image_and_get_url(imgs[0])
+            image_url = await save_image_and_get_url(imgs[0])
             result = {
                 "status": "ok",
                 "image_url": image_url

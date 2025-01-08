@@ -1,16 +1,15 @@
 import json
 import os
 import uuid
-from typing import Optional
+from typing import Optional, Tuple, List, Dict, Any
 from rich.console import Console
-
 from loguru import logger
 from modules import utils
 from modules.comfyui_client import ComfyuiClient
 
 console = Console()
 
-def comfyGen(workflow_name: str, prompt: str = None, img_content: str = None):
+async def comfyGen(workflow_name: str, prompt: str = None, img_content: str = None) -> List[bytes]:
     """原始的 ComfyUI 生成函数"""
     with open(f"./workflows/{workflow_name}.json", "r") as payload_json:
         payload = json.load(payload_json)
@@ -52,15 +51,21 @@ def comfyGen(workflow_name: str, prompt: str = None, img_content: str = None):
     comfyui = ComfyuiClient()
 
     try:
-        images_dict = comfyui.get_images(payload, save_image_node, workflow_name)
+        images_dict = await comfyui.get_images(payload, save_image_node, workflow_name)
         return utils.receiving_image(images_dict)
     except Exception as e:
         logger.error(f"获取图片失败: {e}")
     finally:
-        comfyui.close()
+        await comfyui.close()
     return []
 
-def comfyGenV2(workflow_name: str, prompt: str = None, width: int = 1024, height: int = 1024, urls: str = None):
+async def comfyGenV2(
+    workflow_name: str,
+    prompt: str = None,
+    width: int = 1024,
+    height: int = 1024,
+    urls: str = None
+) -> Tuple[List[bytes], Optional[Dict[str, Any]]]:
     """ComfyUI 生成函数 V2 版本"""
     
     # 添加 _v2 后缀，临时性操作，稳定后考虑删除
@@ -87,7 +92,7 @@ def comfyGenV2(workflow_name: str, prompt: str = None, width: int = 1024, height
     
     if not save_image_node:
         console.print("[red]错误: 未找到 SaveImageWebsocket 节点[/red]")
-        return []
+        return [], None
 
     # 处理提示词节点
     if prompt:
@@ -156,7 +161,7 @@ def comfyGenV2(workflow_name: str, prompt: str = None, width: int = 1024, height
     comfyui = ComfyuiClient()
 
     try:
-        images_dict = comfyui.get_images(payload, save_image_node, workflow_name)
+        images_dict = await comfyui.get_images(payload, save_image_node, workflow_name)
         images = utils.receiving_image(images_dict)
         if image_usage_info:
             return images, image_usage_info
@@ -164,5 +169,5 @@ def comfyGenV2(workflow_name: str, prompt: str = None, width: int = 1024, height
     except Exception as e:
         console.print(f"[red]错误: 获取图片失败: {e}[/red]")
     finally:
-        comfyui.close()
+        await comfyui.close()
     return [], None
