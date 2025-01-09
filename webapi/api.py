@@ -150,7 +150,7 @@ async def comfy_gen_v2(req: ComfyGenV2Req) -> dict:
     """通用 ComfyUI 生成接口 V2"""
     try:
         # 检查是否是重复请求
-        cached_result = request_dedup.check_request(
+        cached_result = await request_dedup.check_request(
             req.workflow_name,
             req.prompt,
             req.width,
@@ -159,7 +159,6 @@ async def comfy_gen_v2(req: ComfyGenV2Req) -> dict:
         )
         
         if cached_result:
-            logger.info(f"检测到重复请求，直接返回缓存结果")
             return cached_result
             
         imgs, image_usage_info = await bizy_air.comfyGenV2(
@@ -184,7 +183,7 @@ async def comfy_gen_v2(req: ComfyGenV2Req) -> dict:
             result = {"status": "error", "msg": "生成图片列表为空"}
             
         # 更新请求记录的结果
-        request_dedup.update_result(
+        await request_dedup.update_result(
             req.workflow_name,
             req.prompt,
             req.width,
@@ -196,7 +195,17 @@ async def comfy_gen_v2(req: ComfyGenV2Req) -> dict:
         return result
     except Exception as e:
         logger.error(f"ComfyUI 生成出错: {e}")
-        return {"status": "error", "msg": f"ComfyUI 生成失败: {e}"}
+        error_result = {"status": "error", "msg": f"ComfyUI 生成失败: {e}"}
+        # 更新失败结果
+        await request_dedup.update_result(
+            req.workflow_name,
+            req.prompt,
+            req.width,
+            req.height,
+            req.urls,
+            error_result
+        )
+        return error_result
 
 
 if __name__ == '__main__':
