@@ -1,0 +1,321 @@
+{
+  "2": {
+    "inputs": {
+      "width": [
+        "103",
+        0
+      ],
+      "height": [
+        "104",
+        0
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "空Latent"
+    }
+  },
+  "3": {
+    "inputs": {
+      "noise_seed": [
+        "105",
+        0
+      ]
+    },
+    "class_type": "BizyAir_RandomNoise",
+    "_meta": {
+      "title": "☁️BizyAir RandomNoise"
+    }
+  },
+  "36": {
+    "inputs": {
+      "clip_name1": "t5xxl_fp16.safetensors",
+      "clip_name2": "clip_l.safetensors",
+      "type": "flux"
+    },
+    "class_type": "BizyAir_DualCLIPLoader",
+    "_meta": {
+      "title": "☁️BizyAir DualCLIPLoader"
+    }
+  },
+  "37": {
+    "inputs": {
+      "clip_l": [
+        "101",
+        0
+      ],
+      "t5xxl": [
+        "101",
+        0
+      ],
+      "guidance": 3.5,
+      "clip": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "BizyAir_CLIPTextEncodeFlux",
+    "_meta": {
+      "title": "☁️BizyAir CLIPTextEncodeFlux"
+    }
+  },
+  "47": {
+    "inputs": {
+      "model": [
+        "61",
+        0
+      ],
+      "conditioning": [
+        "37",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicGuider",
+    "_meta": {
+      "title": "☁️BizyAir BasicGuider"
+    }
+  },
+  "48": {
+    "inputs": {
+      "unet_name": "flux/flux1-dev.sft",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "BizyAir_UNETLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load Diffusion Model"
+    }
+  },
+  "50": {
+    "inputs": {
+      "noise": [
+        "3",
+        0
+      ],
+      "guider": [
+        "47",
+        0
+      ],
+      "sampler": [
+        "60",
+        0
+      ],
+      "sigmas": [
+        "58",
+        0
+      ],
+      "latent_image": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "BizyAir_SamplerCustomAdvanced",
+    "_meta": {
+      "title": "☁️BizyAir SamplerCustomAdvanced"
+    }
+  },
+  "54": {
+    "inputs": {
+      "samples": [
+        "50",
+        0
+      ],
+      "vae": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "BizyAir_VAEDecode",
+    "_meta": {
+      "title": "☁️BizyAir VAE Decode"
+    }
+  },
+  "55": {
+    "inputs": {
+      "vae_name": "flux/ae.sft"
+    },
+    "class_type": "BizyAir_VAELoader",
+    "_meta": {
+      "title": "☁️BizyAir Load VAE"
+    }
+  },
+  "58": {
+    "inputs": {
+      "scheduler": "beta",
+      "steps": 25,
+      "denoise": 1,
+      "model": [
+        "61",
+        0
+      ]
+    },
+    "class_type": "BizyAir_BasicScheduler",
+    "_meta": {
+      "title": "☁️BizyAir BasicScheduler"
+    }
+  },
+  "60": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "BizyAir_KSamplerSelect",
+    "_meta": {
+      "title": "☁️BizyAir KSamplerSelect"
+    }
+  },
+  "61": {
+    "inputs": {
+      "lora_name": "苏-FLUX小红书极致真实",
+      "strength_model": 0.8,
+      "strength_clip": 1,
+      "model_version_id": 12970,
+      "model": [
+        "107",
+        0
+      ],
+      "clip": [
+        "107",
+        1
+      ]
+    },
+    "class_type": "BizyAir_LoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load LoRA"
+    }
+  },
+  "63": {
+    "inputs": {
+      "do_sample": true,
+      "temperature": 0.5,
+      "max_tokens": 256,
+      "caption_type": "Descriptive",
+      "caption_length": "any",
+      "extra_options": "If there is a person/character in the image you must refer to them as {name}.",
+      "name_input": "Jack",
+      "custom_prompt": "",
+      "image": [
+        "100",
+        0
+      ]
+    },
+    "class_type": "BizyAirJoyCaption2",
+    "_meta": {
+      "title": "☁️BizyAir Joy Caption2"
+    }
+  },
+  "99": {
+    "inputs": {
+      "images": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "SaveImageWebsocket",
+    "_meta": {
+      "title": "保存图像到网络接口"
+    }
+  },
+  "100": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "interpolation": "lanczos",
+      "method": "keep proportion",
+      "condition": "downscale if bigger",
+      "multiple_of": 0,
+      "image": [
+        "106",
+        0
+      ]
+    },
+    "class_type": "ImageResize+",
+    "_meta": {
+      "title": "🔧 Image Resize"
+    }
+  },
+  "101": {
+    "inputs": {
+      "text1": [
+        "102",
+        0
+      ],
+      "text2": [
+        "63",
+        0
+      ],
+      "separator": ","
+    },
+    "class_type": "CR Text Concatenate",
+    "_meta": {
+      "title": "🔤 CR Text Concatenate"
+    }
+  },
+  "102": {
+    "inputs": {
+      "prompt": "1girl, photography, film grain, grainy, trendy"
+    },
+    "class_type": "CR Prompt Text",
+    "_meta": {
+      "title": "Lora激活词"
+    }
+  },
+  "103": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Width"
+    }
+  },
+  "104": {
+    "inputs": {
+      "integer": 1024,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Height"
+    }
+  },
+  "105": {
+    "inputs": {
+      "integer": 0,
+      "multiple": 1
+    },
+    "class_type": "CR Integer Multiple",
+    "_meta": {
+      "title": "🐉Seed"
+    }
+  },
+  "106": {
+    "inputs": {
+      "url": "https://gd-hbimg.huaban.com/869ed2a30084fcc68e6f2da140415cff0661bab6d6ee-JGGeMJ_fw1200webp"
+    },
+    "class_type": "BizyAir_LoadImageURL",
+    "_meta": {
+      "title": "🐉No1"
+    }
+  },
+  "107": {
+    "inputs": {
+      "lora_name": "boreal-V2.Lora",
+      "strength_model": 0.6,
+      "strength_clip": 1,
+      "model_version_id": 1920,
+      "model": [
+        "48",
+        0
+      ],
+      "clip": [
+        "36",
+        0
+      ]
+    },
+    "class_type": "BizyAir_LoraLoader",
+    "_meta": {
+      "title": "☁️BizyAir Load LoRA"
+    }
+  }
+}
