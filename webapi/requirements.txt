@@ -1,0 +1,20 @@
+# HTTP和WebSocket客户端
+websockets>=11.0.3  # 替换 websocket-client
+aiohttp>=3.9.1
+requests>=2.31.0
+
+# 文件操作
+aiofiles>=23.2.1
+
+# Web框架
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+
+# 图片处理
+pillow>=10.1.0
+
+# 工具和日志
+pyyaml>=6.0.1
+loguru>=0.7.2
+rich>=13.7.0
+tqdm>=4.66.1
