@@ -1,0 +1,2 @@
+docker run -d --name comfy-api --restart always -p 8008:8008 -p 8188:8188 -e WEBAPI_HOST="your_actual_host_ip_or_domain" comfy-api:latest
+
